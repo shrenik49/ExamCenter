@@ -1,10 +1,10 @@
 const axios = require("axios");
+const { getCenter } = require("../db/dbactions");
 
 async function getCoordinates(cityName) {
   const apiUrl = `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(
     cityName
   )}&format=json`;
-
   try {
     const response = await axios.get(apiUrl);
     const data = response.data;
@@ -16,7 +16,7 @@ async function getCoordinates(cityName) {
       console.log(
         `Coordinates for ${cityName}: Latitude - ${latitude}, Longitude - ${longitude}`
       );
-      return true;
+      return { latitude, longitude };
     } else {
       console.log(`No coordinates found for ${cityName}`);
       return false;
@@ -30,9 +30,8 @@ async function getCoordinates(cityName) {
 async function validCity(city) {
   try {
     const coordinates = await getCoordinates(city);
-
     if (coordinates) {
-      return true;
+      return coordinates;
     } else {
       return false;
     }
@@ -42,4 +41,50 @@ async function validCity(city) {
   }
 }
 
-module.exports = { validCity, getCoordinates };
+
+async function getCityDetails(city) {
+  try {
+    const coordinates = await getCoordinates(city);
+    if (coordinates) {
+      return coordinates;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error validating city:", error);
+    return false;
+  }
+}
+
+async function getExamCenter(city) {
+  try {
+    const coordinates = await getCoordinates(city);
+    const result = await getCenter(coordinates)
+    
+    if (result) {
+     console.log(result);
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error validating city:", error);
+    return false;
+  }
+}
+
+// async function getNearestCenter(city) {
+//   const {latitude,longitude} = coordinates
+//   if (coordinates) {
+//     let city = getNearestCenter(coordinates)
+//   } else {
+//     return null;
+//   }
+// } catch (error) {
+//   console.error("Error validating city:", error);
+//   return false;
+// }
+
+
+
+
+module.exports = { validCity, getCoordinates,getCityDetails,getExamCenter};

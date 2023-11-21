@@ -17,22 +17,5 @@ client.connect()
     console.error("Error connecting to database:", err);
   });
 
-// Handle uncaught exceptions to ensure graceful shutdown
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-  // Close database connection gracefully
-  client.end(() => {
-    process.exit(1);
-  });
-});
-
-// Handle process termination to ensure database connection is closed
-process.on('SIGINT', () => {
-  console.log('Received SIGINT. Closing database connection...');
-  client.end(() => {
-    console.log('Database connection closed.');
-    process.exit(0);
-  });
-});
-
+// Export the client
 module.exports = client;
