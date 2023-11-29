@@ -3,9 +3,7 @@ const { getCenter } = require("../services/dbservices");
 // const { getCenter } = require("../db/dbactions");
 
 async function getCoordinates(cityName) {
-  const apiUrl = `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(
-    cityName
-  )}&format=json`;
+  const apiUrl = `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`;
   try {
     const response = await axios.get(apiUrl);
     const data = response.data;
@@ -63,29 +61,15 @@ async function getExamCenter(city) {
     const result = await getCenter(coordinates)
     
     if (result) {
-     console.log(result);
+        return result
     } else {
-      return null;
+      return "Nearest City Not Found";
     }
   } catch (error) {
     console.error("Error validating city:", error);
-    return false;
+    return error;
   }
 }
-
-// async function getNearestCenter(city) {
-//   const {latitude,longitude} = coordinates
-//   if (coordinates) {
-//     let city = getNearestCenter(coordinates)
-//   } else {
-//     return null;
-//   }
-// } catch (error) {
-//   console.error("Error validating city:", error);
-//   return false;
-// }
-
-
 
 
 module.exports = { validCity, getCoordinates,getCityDetails,getExamCenter};
