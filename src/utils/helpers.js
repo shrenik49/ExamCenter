@@ -1,5 +1,6 @@
 const axios = require("axios");
-const { getCenter } = require("../db/dbactions");
+const { getCenter } = require("../services/dbservices");
+// const { getCenter } = require("../db/dbactions");
 
 async function getCoordinates(cityName) {
   const apiUrl = `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(

@@ -1,9 +1,11 @@
-const { addstudent, getStudent } = require("../db/dbactions");
+// const { addstudent, getStudent } = require("../db/dbactions");
 const express = require("express");
-const { validCity, getExamCenter } = require("../helperfunction");
-const router = express.Router();
+const { addstudent, getStudent } = require("../services/dbservices");
+const { validCity, getExamCenter } = require("../utils/helpers");
+// const { validCity, getExamCenter } = require("../helperfunction");
+const studentRoute = express.Router();
 
-router.post("/addstudent", async (req, res) => {
+studentRoute.post("/addstudent", async (req, res) => {
   try {
     const { name, city, seatno } = req.body;
     let result;
@@ -21,13 +23,12 @@ router.post("/addstudent", async (req, res) => {
   }
 });
 
-router.get("/center", async (req, res) => {
+studentRoute.get("/center", async (req, res) => {
   try {
     const id = req.query.id;
     const city = await getStudent(id);
     if (city) {
         let nearestCity = await getExamCenter(city)
-        console.log(city);
         console.log("nearestCity------->",nearestCity);
       res.status(200).json({ success: true, data: nearestCity });
     } else {
@@ -40,4 +41,4 @@ router.get("/center", async (req, res) => {
 });
 
 
-module.exports = router;
+module.exports = studentRoute;

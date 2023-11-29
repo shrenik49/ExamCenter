@@ -8,7 +8,6 @@ const client = new Client({
   port: 5432,
 });
 
-// Connect to the database
 client.connect()
   .then(() => {
     console.log("Connected to PostgreSQL database");
@@ -17,5 +16,5 @@ client.connect()
     console.error("Error connecting to database:", err);
   });
 
-// Export the client
+
 module.exports = client;

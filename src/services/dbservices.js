@@ -1,11 +1,10 @@
-const client = require('./db');
-const db = require('./db')
+const client = require("../config/db.config");
 
 const cityDetails = {}
 
 async function addstudent(name, city ,seatno) {
     try {
-      await db.query(
+      await client.query(
         "INSERT INTO student (name, city,seatno) VALUES ($1, $2, $3)",
         [name, city ,seatno]
       );
@@ -13,7 +12,7 @@ async function addstudent(name, city ,seatno) {
       console.log("error while addding contacts",err);
       return err
     } finally {
-      db.end();
+      client.end();
     }
   }
 
@@ -30,13 +29,13 @@ async function addstudent(name, city ,seatno) {
       console.log("error while addding contacts",err);
       return err
     } finally {
-      db.end();
+      client.end();
     }
   }
 
 async function getStudent(id) {
     try {
-      const result = await db.query(
+      const result = await client.query(
         "SELECT * FROM student WHERE id = $1",
         [id]
       );
@@ -44,11 +43,14 @@ async function getStudent(id) {
         console.log(result.rows[0].city);
         return result.rows[0].city;
       }
+      else{
+        return null;
+      }
     } catch (err) {
-      console.log("error while addding contacts",err);
+      console.log("error while getting details",err);
       return err
     } finally {
-      db.end();
+      client.end();
     }
 }
 
@@ -61,8 +63,9 @@ async function getCenter(coordinates) {
           ORDER BY distance 
           LIMIT 1;
         `;
-      const result = await client.query(queryString, [latitude, longitude]);
 
+      const result = await client.query(queryString, [latitude, longitude]);
+      client.end();
       if (result) {
         console.log(result);
         return result;
@@ -71,7 +74,7 @@ async function getCenter(coordinates) {
       }
     } catch (error) {
       console.error('Error occurred:', error);
-    }
+    } 
 }
 
   module.exports = {addstudent,getStudent,addCenter,getCenter}
