@@ -1,8 +1,6 @@
-// const { addstudent, getStudent } = require("../db/dbactions");
 const express = require("express");
 const { addstudent, getStudent } = require("../services/dbservices");
 const { validCity, getExamCenter } = require("../utils/helpers");
-// const { validCity, getExamCenter } = require("../helperfunction");
 const studentRoute = express.Router();
 
 studentRoute.post("/addstudent", async (req, res) => {
@@ -28,8 +26,7 @@ studentRoute.get("/center", async (req, res) => {
     const id = req.query.id;
     const city = await getStudent(id);
     if (city) {
-        let nearestCity = await getExamCenter(city)
-        console.log("nearestCity------->",nearestCity);
+      let nearestCity = await getExamCenter(city);
       res.status(200).json({ success: true, data: nearestCity });
     } else {
       res.status(404).json({ success: false, message: "Student not found" });
@@ -39,6 +36,5 @@ studentRoute.get("/center", async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
-
 
 module.exports = studentRoute;
